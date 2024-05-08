@@ -26,10 +26,11 @@ public class ProductService {
     private final RedisTemplate<String, String> redisTemplate;
 
 
-//    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 //
-    public ProductService(RedisTemplate<String, String> redisTemplate) {
+    public ProductService(RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
 
     }
 
@@ -45,8 +46,8 @@ public class ProductService {
 //    }
 
     public RecordId produce(Product product) throws JsonProcessingException{
-//        String jsonString = objectMapper.writeValueAsString(product);
-        ObjectRecord<String, Product> record = StreamRecords.newRecord().ofObject(product).withStreamKey(streamKey);
+        String jsonString = objectMapper.writeValueAsString(product);
+        ObjectRecord<String, String> record = StreamRecords.newRecord().ofObject(jsonString).withStreamKey(streamKey);
         RecordId recordId = this.redisTemplate.opsForStream().add(record);
         if(Objects.isNull(recordId)){
             log.info("error sending event: {}", product);
