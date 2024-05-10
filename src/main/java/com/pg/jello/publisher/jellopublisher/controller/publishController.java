@@ -14,7 +14,7 @@ public class publishController {
     ProductService productService;
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(value="/ping2",method = RequestMethod.GET)
+    @RequestMapping(value="/ping",method = RequestMethod.GET)
     public String pingService(){
         return "pong";
     }
